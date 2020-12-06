@@ -6,5 +6,5 @@ import Data.List.Split
 main :: IO ()
 main = do
   answers <- splitWhen null . map nub . lines <$> readFile "input.txt"
-  print $ sum $ map (length . foldl intersect ['a'..'z']) answers
+  print $ sum $ length . foldl intersect ['a'..'z'] <$> answers
 
