@@ -1,8 +1,9 @@
-module Main where
+module Part2 where
 
 import Data.List
 import Data.List.Split
 import Data.Maybe
+import System.Environment
 
 run :: [Int] -> [[String]] -> Int -> Int -> Maybe Int
 run exec instr pc acc
@@ -20,6 +21,7 @@ setAt xs i x = take i xs ++ [x] ++ drop (i + 1) xs
 
 main :: IO ()
 main = do
-  instrs <- map (splitOn " " . filter (/= '+')) . lines <$> readFile "input.txt"
+  inputFile <- head <$> getArgs
+  instrs <- map (splitOn " " . filter (/= '+')) . lines <$> readFile inputFile
   print $ head $ catMaybes [ run (repeat 0) (setAt instrs i ["nop", "0"]) 0 0 | i <- [0..length instrs - 1],
                              let (instr : _) = instrs !! i, instr == "jmp" ]

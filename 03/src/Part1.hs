@@ -1,4 +1,6 @@
-module Main where
+module Part1 where
+
+import System.Environment
 
 countTrees :: (Int, Int) -> [String] -> Int
 countTrees (r, d) = countTrees'
@@ -8,5 +10,6 @@ countTrees (r, d) = countTrees'
 
 main :: IO ()
 main = do
-  forest <- map cycle . lines <$> readFile "input.txt"
-  print $ product $ flip countTrees forest <$> (1,2):zip [1,3,5,7] (repeat 1)
+  inputFile <- head <$> getArgs
+  forest <- map cycle . lines <$> readFile inputFile 
+  print $ countTrees (3, 1) forest

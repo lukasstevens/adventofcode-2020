@@ -1,6 +1,7 @@
-module Main where
+module Part1 where
 
 import Data.List
+import System.Environment
 
 search :: Char -> Char -> String -> Int -> Int -> Int
 search l h = search'
@@ -13,15 +14,9 @@ search l h = search'
       where
         mid = mi + ((ma - mi) `div` 2)
 
-findSeat :: [Int] -> Int
-findSeat (x : y : xs)
-  | x + 2 == y = x + 1 
-  | otherwise = findSeat (y : xs)
-findSeat _ = undefined
-
 main :: IO ()
 main = do
-  input <- map (splitAt 7) . lines <$> readFile "input.txt"
-  let seats = sort [search 'F' 'B' r 0 127 * 8 + search 'L' 'R' c 0 7  | (r, c) <- input]
-  print $ findSeat seats
+  inputFile <- head <$> getArgs
+  input <- map (splitAt 7) . lines <$> readFile inputFile 
+  print $ maximum [search 'F' 'B' r 0 127 * 8 + search 'L' 'R' c 0 7  | (r, c) <- input]
 

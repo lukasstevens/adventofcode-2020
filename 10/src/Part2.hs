@@ -1,8 +1,8 @@
-module Main where
+module Part2 where
 
 import Data.List
 import Data.Maybe
-
+import System.Environment
 
 tribonacci :: Integer -> Integer
 tribonacci n = tn
@@ -11,6 +11,7 @@ tribonacci n = tn
 
 main :: IO ()
 main = do
-  numbers <- sort . map read . lines <$> readFile "input.txt" :: IO [Integer]
+  inputFile <- head <$> getArgs
+  numbers <- sort . map read . lines <$> readFile inputFile :: IO [Integer]
   let diffs = zipWith (-) (numbers ++ [last numbers + 3]) (0 : numbers)
   print $ product $ map (tribonacci . (+1) . genericLength) $ filter ((/= 3) . head) $ group diffs

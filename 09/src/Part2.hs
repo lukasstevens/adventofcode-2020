@@ -1,7 +1,8 @@
-module Main where
+module Part2 where
 
 import Data.List
 import Data.Maybe
+import System.Environment
 
 findNonSum n xs
   | xs !! n `elem` [ xs !! i + xs !! j | i <- [0..n - 1], j <- [0..n - 1], i /= j ] = findNonSum n $ tail xs 
@@ -15,7 +16,7 @@ findCont n xs
 
 main :: IO ()
 main = do
-  numbers <- map read . lines <$> readFile "input.txt" :: IO [Int]
+  inputFile <- head <$> getArgs
+  numbers <- map read . lines <$> readFile inputFile :: IO [Int]
   let magic = findNonSum 25 numbers 
-  print magic
   print $ findCont magic numbers

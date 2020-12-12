@@ -1,9 +1,10 @@
-module Main where
+module Part2 where
 
 import Data.List
 import Data.List.Split
 import Data.Ix
 import Text.Read
+import System.Environment
 
 maybeRead f v = maybe False f $ readMaybe v
 
@@ -27,7 +28,8 @@ validate _ _ = undefined
 
 main :: IO ()
 main = do
-  input <- readFile "input.txt"
+  inputFile <- head <$> getArgs
+  input <- readFile inputFile 
   let passports = map unwords $ splitWhen null $ lines input
   let possFields = sort ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"]
   print $ sum [1 | fields <- splitOneOf " \n" <$> passports,
