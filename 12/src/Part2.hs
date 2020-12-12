@@ -10,8 +10,7 @@ data Direction = N | E | S | W
 moveDir :: (Int, Int) -> Direction -> Int -> (Int, Int)
 moveDir (i, j) dir u = (i + h * u, j + v * u)
   where
-    direction d = [(0, 1), (1, 0), (0, -1), (-1, 0)] !! fromEnum d
-    (h, v) = direction dir
+    (h, v) = [(0, 1), (1, 0), (0, -1), (-1, 0)] !! fromEnum dir
 
 rotate90 (i, j) = (-j, i)
 

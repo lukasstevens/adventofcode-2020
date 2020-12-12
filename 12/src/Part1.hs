@@ -10,18 +10,14 @@ data Direction = N | E | S | W
 nextDir W = N
 nextDir d = succ d
 
-prevDir N = W
-prevDir d = pred d
-
 moveDir :: (Int, Int) -> Direction -> Int -> (Int, Int)
 moveDir (i, j) dir u = (i + h * u, j + v * u)
   where
-    direction d = [(0, 1), (1, 0), (0, -1), (-1, 0)] !! fromEnum d
-    (h, v) = direction dir
+    (h, v) = [(0, 1), (1, 0), (0, -1), (-1, 0)] !! fromEnum dir
 
 move :: ((Int, Int), Direction) -> (Char, Int) -> ((Int, Int), Direction)
 move (pos, dir) ('F', u) = (moveDir pos dir u, dir)
-move (pos, dir) ('L', u) = (pos, iterate prevDir dir !! div u 90)
+move (pos, dir) ('L', u) = (pos, iterate (nextDir . nextDir . nextDir) dir !! div u 90)
 move (pos, dir) ('R', u) = (pos, iterate nextDir dir !! div u 90)
 move (pos, dir) (mDir, u) = (moveDir pos (read [mDir]) u, dir)
 
