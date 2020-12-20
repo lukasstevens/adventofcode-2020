@@ -12,17 +12,11 @@ data Expr = Const Int | Mul Expr Expr | Add Expr Expr
 parseConst :: Stream s m Char => ParsecT s u m Expr
 parseConst = Const . read <$> many1 digit 
 
-parseMul :: Stream s m Char => ParsecT s u m (Expr -> Expr -> Expr)
-parseMul =  char '*' *> pure Mul 
-
-parseAdd :: Stream s m Char => ParsecT s u m (Expr -> Expr -> Expr)
-parseAdd = char '+' *> pure Add 
-
 parseAdds :: Stream s m Char => ParsecT s u m Expr 
-parseAdds = chainr1 (parseMulsParen <|> parseConst) parseAdd
+parseAdds = chainr1 (parseMulsParen <|> parseConst) (char '+' *> pure Add) 
 
 parseMuls :: Stream s m Char => ParsecT s u m Expr
-parseMuls = chainr parseAdds parseMul (Const 1)
+parseMuls = chainr parseAdds (char '*' *> pure Mul) (Const 1)
 
 parseMulsParen :: Stream s m Char => ParsecT s u m Expr
 parseMulsParen = between (char '(') (char ')') parseMuls
