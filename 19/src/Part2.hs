@@ -1,5 +1,7 @@
+{-# LANGUAGE BangPatterns #-}
 module Part2 where
 
+import qualified Data.Text as Text
 import Data.Maybe
 import Data.List
 import qualified Data.IntMap as M
@@ -23,7 +25,7 @@ parseRules m (r : rs) = parseRules (parseRule m r) rs
 
 regexFromRules :: M.IntMap (Either String [[Int]]) -> Int -> String
 regexFromRules m 8 = "(" ++ regexFromRules m 42 ++ ")+"
-regexFromRules m 11 = "(" ++ intercalate "|" [ concat (replicate i r1 ++ replicate i r2) | i <- [1..10]] ++ ")"
+regexFromRules m 11 = "(" ++ intercalate "|" [concat (replicate i r1 ++ replicate i r2) | i <- [1..6]] ++ ")"
   where
     r1 = regexFromRules m 42
     r2 = regexFromRules m 31
@@ -31,16 +33,11 @@ regexFromRules m r = case m M.! r of
                        Left s -> s
                        Right rs -> (\s -> "(" ++ s ++ ")") . intercalate "|" $ concatMap (regexFromRules m) <$> rs
 
-matchesFromRules :: M.IntMap (Either String [[Int]]) -> Int -> Int -> [String]
-matchesFromRules m maxL r = case m M.! r of
-                       Left s -> [s]
-                       Right rs -> concat $ concatMap (matchesFromRules m maxL) <$> rs 
+
 main :: IO ()
 main = do
   inputFile <- head <$> getArgs
   [rules, ws] <- splitOn [""] . lines <$> readFile inputFile
   let rm = parseRules M.empty rules
-  --let regex = makeRegex $ regexFromRules rm 0 :: Text.Regex.TDFA.Regex
-  --let matches = map (isJust . matchOnce regex) ws
-  print $ matchesFromRules rm (maximum $ length <$> ws) 42
-  return ()
+  let regex = regexFromRules rm 0
+  print $ foldl' (\acc s -> acc + fromEnum (s == (s =~ regex))) 0 $ map Text.pack ws

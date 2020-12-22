@@ -11,7 +11,9 @@ common common-all
       base == 4.*,
       split == 0.2.*,
       containers == 0.6.*,
-      regex-tdfa == 1.3.*
+      regex-tdfa == 1.3.*,
+      text == 1.2.*,
+      array == 0.5.*
 
 executable part1 
   import: common-all
