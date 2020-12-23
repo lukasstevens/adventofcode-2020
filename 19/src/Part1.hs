@@ -1,6 +1,7 @@
 module Part1 where
 
 import Data.List
+import qualified Data.Text as Text
 import qualified Data.IntMap as M
 import Data.List.Split
 import System.Environment
@@ -29,7 +30,5 @@ main = do
   inputFile <- head <$> getArgs
   [rules, ws] <- splitOn [""] . lines <$> readFile inputFile
   let rm = parseRules M.empty rules
-  let regex =  regexFromRules rm 0
-  let matches = map (\s -> s == (s =~ regex)) ws
-  print . length . filter id $ matches 
-  return ()
+  let regex = makeRegex $ "\\`" ++ regexFromRules rm 0 ++ "\\'" :: Regex
+  print $ foldl' (\acc s -> acc + fromEnum (match regex s :: Bool)) 0 $ map Text.pack ws
