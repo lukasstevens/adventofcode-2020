@@ -1,8 +1,6 @@
-{-# LANGUAGE BangPatterns #-}
 module Part2 where
 
 import qualified Data.Text as Text
-import Data.Maybe
 import Data.List
 import qualified Data.IntMap as M
 import Data.List.Split
@@ -39,5 +37,5 @@ main = do
   inputFile <- head <$> getArgs
   [rules, ws] <- splitOn [""] . lines <$> readFile inputFile
   let rm = parseRules M.empty rules
-  let regex = regexFromRules rm 0
-  print $ foldl' (\acc s -> acc + fromEnum (s == (s =~ regex))) 0 $ map Text.pack ws
+  let regex = makeRegex $ "\\`" ++ regexFromRules rm 0 ++ "\\'" :: Regex
+  print $ foldl' (\acc s -> acc + fromEnum (match regex s :: Bool)) 0 $ map Text.pack ws
