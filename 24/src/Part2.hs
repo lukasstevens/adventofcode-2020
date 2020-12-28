@@ -8,7 +8,8 @@ import System.Environment
 neighbors :: (Int, Int) -> Set.Set (Int, Int)
 neighbors (x, y) = Set.fromList 
   [ (x, y - 1), (x - 1, y - 1), (x + 1, y + 1)
-  , (x, y + 1), (x - 1, y), (x + 1, y)]
+  , (x, y + 1), (x - 1, y), (x + 1, y)
+  ]
 
 coords :: (Int, Int) -> String -> (Int, Int)
 coords (x, y) ('s':'e':ds) = coords (x, y - 1) ds
