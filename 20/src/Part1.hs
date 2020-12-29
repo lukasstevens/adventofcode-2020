@@ -16,6 +16,6 @@ main = do
   inputFile <- head <$> getArgs
   tiles <- map (\ts -> (head ts, map (== '#') <$> tail ts)) . splitOn [""] . lines <$> readFile inputFile
   let borders = concatMap (\(t, ts) -> zip (repeat t) $ tileBorders ts) tiles
-  let borderMatching = filter ((== 2) . length) $ groupBy ((==) `on` snd) $ sortOn snd $ borders
+  let borderMatching = filter ((== 2) . length) $ groupBy ((==) `on` snd) $ sortOn snd borders
   let borderTiles = [t | (t, _) <- tiles, sum (map (fromEnum . (t `elem`) . map fst) borderMatching) == 4]
   print $ product $ read . drop 5 . init <$> borderTiles

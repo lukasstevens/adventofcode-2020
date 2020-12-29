@@ -10,7 +10,8 @@ common common-all
   build-depends:
       base == 4.*,
       split == 0.2.*,
-      containers == 0.6.*
+      containers == 0.6.*,
+      mtl == 2.*
 
 executable part1 
   import: common-all
